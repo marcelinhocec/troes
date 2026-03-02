@@ -6,4 +6,25 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <url>
+    <loc>https://www.troes.com.br/faq.html</loc>
+    <lastmod>2026-03-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.troes.com.br/termo.html</loc>
+    <lastmod>2026-03-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.troes.com.br/politica.html</loc>
+    <lastmod>2026-03-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>

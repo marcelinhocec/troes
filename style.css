@@ -14,7 +14,7 @@
   --green-border: rgba(200,255,0,0.1);
   --border: rgba(255,255,255,0.07);
   /* Contraste aumentado de 0.42 para 0.75 para melhor leitura */
-  --text-muted: rgba(245,244,240,0.75);
+  --text-muted: rgba(245,244,240,0.70);
 }
 
 html { scroll-behavior: smooth; }
@@ -170,11 +170,16 @@ nav.scrolled .nav-cta { padding: 8px 20px !important; font-size: 12px !important
   width: max-content;
 }
 .marquee-item {
-  font-size: 15px; /* Fonte maior */
-  color: var(--accent); /* Cor verde forte */
-  text-transform: uppercase; letter-spacing: .15em;
-  white-space: nowrap; display: flex; align-items: center; gap: 18px; font-weight: 600;
-  text-shadow: 0 0 12px rgba(200,255,0,0.3);
+    font-size: 13px; /* Melhor legibilidade */
+    color: rgba(200,255,0,0.8); /* Cor verde da marca em vez de branco muito transparente */
+    text-transform: uppercase; 
+    letter-spacing: .15em;
+    white-space: nowrap; 
+    display: flex; 
+    align-items: center; 
+    gap: 18px; 
+    font-weight: 500;
+  
 }
 .marquee-item span {
   display: inline-block; width: 6px; height: 6px;

@@ -27,21 +27,22 @@ body {
   cursor: none;
 }
 
-/* CURSOR */
-.cursor {
-  position: fixed; width: 10px; height: 10px;
-  background: var(--accent); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-  transition: width .3s, height .3s, transform .15s;
-}
-.cursor-ring {
-  position: fixed; width: 36px; height: 36px;
-  border: 1.5px solid rgba(200,255,0,.4);
-  border-radius: 50%; pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: width .3s, height .3s;
-}
+/* CURSOR OTIMIZADO (Sem Reflow) */
+  .cursor {
+    position: fixed; top: 0; left: 0; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    /* Retiramos a transição do transform para não conflitar com o JS */
+    transition: width .3s, height .3s;
+    will-change: transform;
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+    border: 1.5px solid rgba(200,255,0,.4);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transition: width .3s, height .3s;
+    will-change: transform;
+  }
 
 /* NAV */
 nav {

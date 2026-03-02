@@ -59,3 +59,21 @@
     });
   }, { threshold: 0.3 });
   document.querySelectorAll('.method-visual').forEach(el => barObserver.observe(el));
+// Accordion Logic para o FAQ
+const faqBtns = document.querySelectorAll('.faq-btn');
+
+faqBtns.forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.classList.toggle('active');
+    const content = this.nextElementSibling;
+    const icon = this.querySelector('.faq-icon');
+    
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+      icon.textContent = '+';
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      icon.textContent = '−';
+    }
+  });
+});

@@ -1,79 +1,94 @@
-  // Nav flutuante ao scroll
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // 1. NAV FLUTUANTE (Otimizado com passive)
   const nav = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 80) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-  });
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 80) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }, { passive: true });
+  }
 
-  // Custom cursor
+  // 2. CURSOR CUSTOMIZADO (Otimizado para Core Web Vitals)
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
+  let mx = -100, my = -100, rx = -100, ry = -100; // Inicia fora do ecrã
 
+  // O evento apenas capta as coordenadas (sem forçar renderização)
   document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-  });
+    mx = e.clientX;
+    my = e.clientY;
+  }, { passive: true });
 
-  (function animRing() {
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(animRing);
-  })();
+  // Render Loop unificado: gere a animação a 60 FPS cravados
+  if (cursor && ring) {
+    (function renderLoop() {
+      // Bolinha segue instantaneamente
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
 
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
-      ring.style.width = '64px'; ring.style.height = '64px';
+      // Anel segue com efeito de elástico (lerp)
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+
+      requestAnimationFrame(renderLoop);
+    })();
+
+    // Efeito de hover nos links
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+        ring.style.width = '64px'; ring.style.height = '64px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.width = '36px'; ring.style.height = '36px';
+      });
     });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.width = '36px'; ring.style.height = '36px';
-    });
-  });
+  }
 
-  // Scroll reveal
+  // 3. SCROLL REVEAL (Animações de entrada)
   const reveals = document.querySelectorAll('.reveal');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  if (reveals.length > 0) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => obs.observe(el));
+
+    // Garante que o Hero Section apareça imediatamente
+    document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), 150 + i * 130);
     });
-  }, { threshold: 0.08  });
-  reveals.forEach(el => obs.observe(el));
+  }
 
-  // Hero imediato
-  document.querySelectorAll('.hero .reveal').forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), 150 + i * 130);
-  });
+  // 4. LÓGICA DO FAQ (Acordeão)
+  const faqBtns = document.querySelectorAll('.faq-btn');
+  if (faqBtns.length > 0) {
+    faqBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        const icon = this.querySelector('.faq-icon');
 
-  // Animate metric bars when visible
-  const barObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.bar-fill').forEach(b => b.classList.add('animated'));
-        barObserver.unobserve(e.target);
-      }
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          if (icon) icon.textContent = '+';
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+          if (icon) icon.textContent = '−';
+        }
+      });
     });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('.method-visual').forEach(el => barObserver.observe(el));
-// Accordion Logic para o FAQ
-const faqBtns = document.querySelectorAll('.faq-btn');
+  }
 
-faqBtns.forEach(btn => {
-  btn.addEventListener('click', function() {
-    this.classList.toggle('active');
-    const content = this.nextElementSibling;
-    const icon = this.querySelector('.faq-icon');
-    
-    if (content.style.maxHeight) {
-      content.style.maxHeight = null;
-      icon.textContent = '+';
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-      icon.textContent = '−';
-    }
-  });
 });

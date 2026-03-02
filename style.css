@@ -560,3 +560,56 @@ footer { padding: 88px 52px 52px; border-top: 1px solid var(--border); }
 .skip-link:focus {
   top: 0;
 }
+
+/* =========================================
+   PÁGINAS DE CONTEÚDO (Política, Termos)
+   ========================================= */
+.text-content-section {
+  background: var(--black);
+  padding: 80px 52px 120px;
+}
+.text-container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.text-container h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--accent);
+  margin-top: 48px;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+  font-style: italic;
+  opacity: .9;
+}
+.text-container p {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.text-container ul {
+  margin: 16px 0 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.text-container ul li {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+.text-container ul li strong {
+  color: var(--white);
+  font-weight: 600;
+}
+.text-container a {
+  color: var(--accent);
+  text-decoration: none;
+  opacity: .8;
+  transition: opacity .2s;
+}
+.text-container a:hover { opacity: 1; }
+@media (max-width: 960px) {
+  .text-content-section { padding: 60px 24px 80px; }
+}

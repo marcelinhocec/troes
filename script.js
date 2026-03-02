@@ -12,32 +12,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { passive: true });
   }
 
-  // 2. CURSOR CUSTOMIZADO (Otimizado para Core Web Vitals)
+// Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
-  let mx = -100, my = -100, rx = -100, ry = -100; // Inicia fora do ecrã
+  let mx = 0, my = 0, rx = 0, ry = 0;
 
-  // O evento apenas capta as coordenadas (sem forçar renderização)
+  // Apenas regista a posição (adicionado passive: true para otimização)
   document.addEventListener('mousemove', e => {
-    mx = e.clientX;
+    mx = e.clientX; 
     my = e.clientY;
   }, { passive: true });
 
-  // Render Loop unificado: gere a animação a 60 FPS cravados
-  if (cursor && ring) {
-    (function renderLoop() {
-      // Bolinha segue instantaneamente
-      cursor.style.left = mx + 'px';
-      cursor.style.top = my + 'px';
-
-      // Anel segue com efeito de elástico (lerp)
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx + 'px';
-      ring.style.top = ry + 'px';
-
-      requestAnimationFrame(renderLoop);
-    })();
+  (function animRing() {
+    // A atualização visual de ambos os cursores é feita aqui, a 60fps
+    cursor.style.left = mx + 'px'; 
+    cursor.style.top = my + 'px';
+    
+    rx += (mx - rx) * 0.12; 
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; 
+    ring.style.top = ry + 'px';
+    
+    requestAnimationFrame(animRing);
+  })();
 
     // Efeito de hover nos links
     document.querySelectorAll('a, button').forEach(el => {

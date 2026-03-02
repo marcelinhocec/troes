@@ -13,41 +13,40 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 // Custom cursor
+  // Custom cursor (Otimizado com translate3d e RAF)
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
+  let cursorOffset = 5, ringOffset = 18; // Metade da largura para centralizar
 
-  // Apenas regista a posição (adicionado passive: true para otimização)
+  // Usamos passive: true para não travar a rolagem da página
   document.addEventListener('mousemove', e => {
     mx = e.clientX; 
     my = e.clientY;
   }, { passive: true });
 
   (function animRing() {
-    // A atualização visual de ambos os cursores é feita aqui, a 60fps
-    cursor.style.left = mx + 'px'; 
-    cursor.style.top = my + 'px';
-    
     rx += (mx - rx) * 0.12; 
     ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px'; 
-    ring.style.top = ry + 'px';
+    
+    // translate3d força o uso da GPU, zerando o Reflow
+    cursor.style.transform = `translate3d(${mx - cursorOffset}px, ${my - cursorOffset}px, 0)`;
+    ring.style.transform = `translate3d(${rx - ringOffset}px, ${ry - ringOffset}px, 0)`;
     
     requestAnimationFrame(animRing);
   })();
 
-    // Efeito de hover nos links
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
-        ring.style.width = '64px'; ring.style.height = '64px';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-        ring.style.width = '36px'; ring.style.height = '36px';
-      });
+  // Correção do efeito Hover
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '25px'; cursor.style.height = '25px'; cursorOffset = 12.5;
+      ring.style.width = '64px'; ring.style.height = '64px'; ringOffset = 32;
     });
-  }
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px'; cursor.style.height = '10px'; cursorOffset = 5;
+      ring.style.width = '36px'; ring.style.height = '36px'; ringOffset = 18;
+    });
+  });
 
   // 3. SCROLL REVEAL (Animações de entrada)
   const reveals = document.querySelectorAll('.reveal');

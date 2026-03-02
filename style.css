@@ -543,3 +543,21 @@ footer { padding: 88px 52px 52px; border-top: 1px solid var(--border); }
   .faq-category-title { font-size: 20px; }
   .faq-content p { padding-right: 0; font-size: 14px; }
 }
+/* =========================================
+   ACESSIBILIDADE (Skip Link)
+   ========================================= */
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  background: var(--accent);
+  color: var(--black);
+  padding: 12px 24px;
+  font-weight: 600;
+  z-index: 99999;
+  transition: top 0.3s ease;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
